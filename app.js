@@ -69,9 +69,9 @@ const dilation = {
   preview(d) { return `${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(dilState(d).sec)}`; },
   mount(root) {
     root.className = 'clk dil';
-    root.innerHTML = `<div class="d-main"><div class="d-hm"></div><div class="d-srow"><span class="d-s"></span></div></div>
-      <div><canvas></canvas><div class="d-meta"></div>
-      <p class="caption"><b>Time dilation.</b> Every minute lasts exactly sixty seconds, but its seconds are not equal. They crawl as the minute turns and rush through the middle. Hours and minutes are always exact; the seconds lag, lead, then land on time.</p></div>`;
+    root.innerHTML = `<div class="d-comp"><div class="d-time"><span class="d-hm"></span>:<span class="d-s"></span></div>
+      <canvas></canvas><div class="d-meta"></div></div>
+      <div><p class="caption"><b>Time dilation.</b> Every minute lasts exactly sixty seconds, but its seconds are not equal. They crawl as the minute turns and rush through the middle. Hours and minutes are always exact; the seconds lag, lead, then land on time.</p></div>`;
     this.hm = $('.d-hm', root); this.s = $('.d-s', root); this.meta = $('.d-meta', root);
     this.cv = $('canvas', root); this.ctx = this.cv.getContext('2d'); this.last = {};
   },
@@ -82,14 +82,17 @@ const dilation = {
     if (this.last.hm !== hm) this.hm.textContent = this.last.hm = hm;
     const ss = p2(st.sec);
     if (this.last.ss !== ss) this.s.textContent = this.last.ss = ss;
-    // fast -> condensed, slow -> stretched; clamp keeps it readable
-    const sx = 0.55 + (1.85 - st.rate) / 1.7;
-    this.s.style.transform = `scaleX(${sx.toFixed(3)})`;
+    // white where time crawls (around :00), real red where it rushes (mid-minute); continuous with the rate
+    const t = Math.min(1, Math.max(0, (st.rate - (1 - A)) / (2 * A)));
+    const col = `rgb(255,${Math.round(255 - 213 * t)},${Math.round(255 - 229 * t)})`;
+    this.s.style.color = col; this.col = col;
     const dr = ((st.drift >= 0 ? '+' : '−') + Math.abs(st.drift).toFixed(1)).padStart(5, ' ');
-    this.meta.innerHTML = `drift  <b>${dr} s</b>   rate  ${st.rate.toFixed(2)}×`;
+    this.meta.innerHTML = `drift  <b style="color:${this.col}">${dr} s</b>   rate  ${st.rate.toFixed(2)}×`;
     this.draw(st);
   },
   draw(st) {
+    const kk = devicePixelRatio || 1;
+    if (Math.round(this.cv.clientWidth * kk) !== this.cv.width || Math.round(this.cv.clientHeight * kk) !== this.cv.height) this.resize();
     const c = this.ctx, W = this.cv.width, H = this.cv.height, k = this.k || 1;
     if (!W) return;
     c.clearRect(0, 0, W, H);
@@ -103,9 +106,9 @@ const dilation = {
       if (i === 60) c.strokeStyle = '#2c2c2c';
       c.beginPath(); c.moveTo(xt, top); c.lineTo(xb, bot); c.stroke();
     }
-    c.strokeStyle = '#FF4D00'; c.lineWidth = 2 * k;
+    c.strokeStyle = '#FF2A1A'; c.lineWidth = 2 * k;
     c.beginPath(); c.moveTo(pad + st.disp / 60 * w, top - 3 * k); c.lineTo(pad + st.x * w, bot); c.stroke();
-    c.fillStyle = '#FF4D00'; c.fillRect(pad + st.x * w - 3 * k, bot - 1 * k, 6 * k, 3 * k);
+    c.fillStyle = '#FF2A1A'; c.fillRect(pad + st.x * w - 3 * k, bot - 1 * k, 6 * k, 3 * k);
   }
 };
 

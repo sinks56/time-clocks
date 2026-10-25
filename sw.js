@@ -1,5 +1,5 @@
 // Network first, cache fallback: always fresh online, still works offline on a wall display.
-const C = 'time-clocks-v1';
+const C = 'time-clocks-v2';
 self.addEventListener('install', e => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', e => {

@@ -56,21 +56,13 @@ body.kiosk .stage{padding-top:calc(var(--st) + 18px)}
 
 /* ---------- 1 dilation ---------- */
 .dil{justify-content:space-between}
-.dil .d-main{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
-.dil .d-hm{font-weight:700;letter-spacing:-.045em;line-height:.82;font-size:min(33vw,38vh)}
-.dil .d-srow{display:flex;align-items:flex-end;gap:.25em;margin-top:.08em;font-size:min(33vw,38vh);height:.9em}
-.dil .d-s{font-weight:700;letter-spacing:-.045em;line-height:.82;transform-origin:0 100%;display:inline-block;will-change:transform;color:var(--fg)}
-.dil .d-meta{font-family:var(--mono);font-size:max(11px,min(1.6vw,2.2vh));color:var(--dim);line-height:1.5;padding-bottom:.4em;white-space:pre}
-.dil .d-meta b{color:var(--accent);font-weight:400}
-.dil canvas{width:100%;height:min(16vh,120px);display:block;margin:14px 0 10px}
-@media (min-aspect-ratio:4/3){
-  .dil .d-hm,.dil .d-srow{font-size:min(19vw,34vh)}
-  .dil .d-main{flex-direction:row;align-items:flex-end;justify-content:flex-start;gap:.06em}
-  .dil .d-srow{margin:0 0 0 .14em;font-size:min(19vw,34vh)}
-  .dil .d-s{color:var(--fg)}
-  .dil .d-srow::before{content:'';width:.07em;height:.62em;background:var(--accent);align-self:flex-end;margin:0 .1em .1em 0}
-}
-
+.dil .d-comp{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-self:center;width:max-content;max-width:100%}
+.dil .d-time{font-weight:700;letter-spacing:-.045em;line-height:.8;font-size:min(24.5vw,30vh);white-space:nowrap;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;margin-left:-.04em}
+.dil .d-s{color:#fff}
+.dil canvas{width:100%;height:min(14vh,110px);display:block;margin:min(2.2vh,16px) 0 6px}
+.dil .d-meta{font-family:var(--mono);font-size:max(11px,min(1.4vw,2vh));color:var(--dim);line-height:1.5;white-space:pre}
+.dil .d-meta b{color:var(--red,#FF2A1A);font-weight:400}
+.dil .caption{margin-top:12px}
 /* ---------- 2 timecode ---------- */
 .tc{justify-content:center}
 .slate{border:2px solid var(--fg);width:100%;max-width:1400px;margin:0 auto;display:flex;flex-direction:column}
