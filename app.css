@@ -66,7 +66,9 @@ body.kiosk .stage{padding-top:calc(var(--st) + 18px)}
 @media (min-aspect-ratio:4/3){
   .dil .d-hm,.dil .d-srow{font-size:min(19vw,34vh)}
   .dil .d-main{flex-direction:row;align-items:flex-end;justify-content:flex-start;gap:.06em}
-  .dil .d-srow{margin:0;font-size:min(19vw,34vh)}
+  .dil .d-srow{margin:0 0 0 .14em;font-size:min(19vw,34vh)}
+  .dil .d-s{color:var(--fg)}
+  .dil .d-srow::before{content:'';width:.07em;height:.62em;background:var(--accent);align-self:flex-end;margin:0 .1em .1em 0}
 }
 
 /* ---------- 2 timecode ---------- */
@@ -79,9 +81,9 @@ body.kiosk .stage{padding-top:calc(var(--st) + 18px)}
 .s-cell{flex:1;padding:6px 8px;border-right:1px solid var(--fg);min-width:0}
 .s-cell:last-child{border-right:0}
 .s-k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);display:block}
-.s-v{font-family:var(--mono);font-size:clamp(14px,2.8vw,30px);line-height:1.15;white-space:nowrap;overflow:hidden;display:block}
+.s-v{font-family:var(--mono);font-size:clamp(12px,2.8vw,30px);line-height:1.15;white-space:nowrap;overflow:hidden;display:block}
 .s-tc{padding:2vh 8px 1.4vh;text-align:center}
-.tcd{font-family:var(--mono);font-weight:700;font-size:min(14.5vw,24vh);letter-spacing:-.04em;line-height:1;white-space:nowrap}
+.tcd{font-family:var(--mono);font-weight:700;font-size:min(12.4vw,24vh);letter-spacing:-.04em;line-height:1;white-space:nowrap}
 .tcd .ff{color:var(--accent)}
 .tcd .sep{color:var(--dim)}
 .fbar{display:grid;grid-template-columns:repeat(25,1fr);gap:2px;margin-top:1.4vh}
