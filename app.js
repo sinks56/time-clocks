@@ -528,9 +528,268 @@ const wait = {
 };
 
 /* ======================================================================
+   SERIES 03
+   ====================================================================== */
+
+/* ======================================================================
+   11  TIME IS MONEY
+   A running meter showing time as units being spent from the daily allowance.
+   Each second is a unit ticking away. Conceptual, not real currency.
+   ====================================================================== */
+const money = {
+  id: 'money', series: 3, title: 'Time is money', desc: 'The daily allowance, running down.',
+  preview(d) { const s = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds(); return `SPENT\n${s.toLocaleString()}`; },
+  mount(root) {
+    root.className = 'clk mny';
+    root.innerHTML = `<div class="m-head"><span class="m-date"></span><span class="m-clk"></span></div>
+      <div class="m-main">
+        <div class="m-meter"><div class="m-lab">UNITS SPENT</div><div class="m-val m-spent"></div></div>
+        <div class="m-meter m-rem"><div class="m-lab">REMAINING</div><div class="m-val m-left"></div></div>
+      </div>
+      <div class="m-bar"><i></i></div>
+      <div class="m-foot">
+        <div class="m-line"><span>Daily allowance</span><span class="m-tot">86,400</span></div>
+        <div class="m-line"><span>Rate</span><span>1 unit / second</span></div>
+      </div>
+      <p class="caption"><b>Time is money.</b> You start each day with 86,400 units. One ticks away every second, no refunds, no overdraft. This meter tracks what you've spent and what you have left.</p>`;
+    this.date = $('.m-date', root); this.clk = $('.m-clk', root);
+    this.spent = $('.m-spent', root); this.leftEl = $('.m-left', root); this.bar = $('.m-bar i', root);
+    this.lastS = -1;
+  },
+  frame(d) {
+    const sec = d.getSeconds();
+    if (this.lastS === sec) return;
+    this.lastS = sec;
+    const total = 86400;
+    const gone = d.getHours() * 3600 + d.getMinutes() * 60 + sec;
+    const rem = total - gone;
+    this.spent.textContent = gone.toLocaleString();
+    this.leftEl.textContent = rem.toLocaleString();
+    this.bar.style.width = (gone / total * 100).toFixed(3) + '%';
+    this.clk.textContent = hms(d);
+    const ds = `${DAYS[d.getDay()].slice(0, 3).toUpperCase()} ${p2(d.getDate())} ${MONTHS[d.getMonth()].slice(0, 3).toUpperCase()}`;
+    if (this.lastD !== ds) { this.date.textContent = this.lastD = ds; }
+  }
+};
+
+/* ======================================================================
+   12  DO YOU HAVE THE TIME
+   A conversational interface. Someone keeps asking, you keep answering.
+   ====================================================================== */
+const ASKS = [
+  'Do you have the time?',
+  'What time is it?',
+  'Got the time?',
+  'Know what time it is?',
+  'Excuse me, the time?',
+  "What's the time?",
+  'Time?',
+  'Can you tell me the time?',
+  'Hey, what time you got?'
+];
+const doyou = {
+  id: 'doyou', series: 3, title: 'Do you have the time', desc: 'Someone keeps asking. You keep answering.',
+  preview(d) { return `Q: Time?\nA: ${hms(d)}`; },
+  mount(root) {
+    root.className = 'clk doy';
+    root.innerHTML = `<div class="d-chat"></div>
+      <p class="caption"><b>Do you have the time?</b> A stranger asks. You answer. They ask again. Every minute, a new question. Every second, the same answer: now.</p>`;
+    this.chat = $('.d-chat', root);
+    this.lines = [];
+    this.askIdx = 0;
+    this.lastMin = -1;
+    this.lastSec = -1;
+  },
+  resize() {
+    this.chat.innerHTML = '';
+    this.lines = [];
+    this.lastMin = -1;
+    this.lastSec = -1;
+  },
+  frame(d) {
+    const M = d.getMinutes(), sec = d.getSeconds();
+    if (M !== this.lastMin) {
+      this.lastMin = M;
+      this.askIdx = (this.askIdx + 1) % ASKS.length;
+      const q = h('div', 'd-q', ASKS[this.askIdx]);
+      this.chat.appendChild(q);
+      this.lines.push(q);
+      const a = h('div', 'd-a', '');
+      this.chat.appendChild(a);
+      this.ansEl = a;
+      this.lines.push(a);
+      while (this.lines.length > 10) { this.lines.shift().remove(); }
+      this.chat.scrollTop = this.chat.scrollHeight;
+    }
+    if (sec !== this.lastSec && this.ansEl) {
+      this.lastSec = sec;
+      this.ansEl.textContent = hms(d);
+      this.chat.scrollTop = this.chat.scrollHeight;
+    }
+  }
+};
+
+/* ======================================================================
+   13  TIME MACHINE
+   A sci-fi control panel. Present time as coordinates, velocity at 1.00x.
+   ====================================================================== */
+const machine = {
+  id: 'machine', series: 3, title: 'Time Machine', desc: 'Present coordinates. Velocity: 1.00×.',
+  preview(d) { return `PRESENT\n${hms(d)}`; },
+  mount(root) {
+    root.className = 'clk tm';
+    root.innerHTML = `<div class="tm-panel">
+      <div class="tm-head">TIME MACHINE</div>
+      <div class="tm-row">
+        <div class="tm-cell"><div class="tm-k">DATE COORDINATE</div><div class="tm-v tm-date"></div></div>
+        <div class="tm-cell"><div class="tm-k">TIME COORDINATE</div><div class="tm-v tm-time"></div></div>
+      </div>
+      <div class="tm-row">
+        <div class="tm-cell tm-vel-cell">
+          <div class="tm-k">VELOCITY</div>
+          <div class="tm-dial">
+            <svg viewBox="-50 -50 100 100"><circle r="46" fill="none" stroke="#333" stroke-width="2"/><path class="tm-arc" fill="none" stroke="#FF4D00" stroke-width="4" stroke-linecap="round"/><line class="tm-needle" x1="0" y1="0" x2="0" y2="-38" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle r="5" fill="#fff"/></svg>
+            <div class="tm-vv">1.00×</div>
+          </div>
+        </div>
+        <div class="tm-cell"><div class="tm-k">STATUS</div><div class="tm-status"><i class="tm-led"></i>PRESENT</div></div>
+      </div>
+      <div class="tm-row tm-dest"><div class="tm-cell"><div class="tm-k">DESTINATION</div><div class="tm-v dim">—</div></div></div>
+    </div>
+    <p class="caption"><b>Time Machine.</b> Control panel for a machine that only goes one direction, at one speed. Destination: always now. Velocity: always 1×. You are a passenger.</p>`;
+    this.dateEl = $('.tm-date', root); this.timeEl = $('.tm-time', root);
+    this.needle = $('.tm-needle', root); this.arc = $('.tm-arc', root); this.led = $('.tm-led', root);
+    this.lastT = '';
+  },
+  frame(d) {
+    const t = hms(d);
+    if (this.lastT === t) return;
+    this.lastT = t;
+    this.timeEl.textContent = t;
+    const ds = `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+    if (this.lastD !== ds) { this.dateEl.textContent = this.lastD = ds; }
+    const s = d.getSeconds();
+    const angle = -135 + (s / 60) * 270;
+    this.needle.setAttribute('transform', `rotate(${angle.toFixed(1)})`);
+    const r = 38, startA = -135 * Math.PI / 180, endA = angle * Math.PI / 180;
+    const x1 = r * Math.cos(startA), y1 = r * Math.sin(startA);
+    const x2 = r * Math.cos(endA), y2 = r * Math.sin(endA);
+    const large = (angle + 135) > 180 ? 1 : 0;
+    this.arc.setAttribute('d', `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`);
+    this.led.style.opacity = (0.4 + 0.6 * Math.abs(Math.sin(s * Math.PI))).toFixed(2);
+  }
+};
+
+/* ======================================================================
+   14  TIME IN A BOX
+   A shipping manifest. Dimensions = hours × minutes × seconds.
+   ====================================================================== */
+const inbox = {
+  id: 'inbox', series: 3, title: 'Time in a box', desc: 'Dimensions: hours × minutes × seconds.',
+  preview(d) { return `${p2(d.getHours())}×${p2(d.getMinutes())}×${p2(d.getSeconds())}\nFRAGILE`; },
+  mount(root) {
+    root.className = 'clk box';
+    root.innerHTML = `<div class="b-label">
+      <div class="b-head"><span class="b-co">TIME.</span><span class="b-ship">SHIPPING MANIFEST</span></div>
+      <div class="b-body">
+        <div class="b-sec b-dims">
+          <div class="b-k">DIMENSIONS</div>
+          <div class="b-dim"><span class="b-h"></span> <span class="dim">H</span> × <span class="b-m"></span> <span class="dim">M</span> × <span class="b-s"></span> <span class="dim">S</span></div>
+        </div>
+        <div class="b-row">
+          <div class="b-sec"><div class="b-k">CONTENTS</div><div class="b-cv">THE PRESENT MOMENT</div></div>
+          <div class="b-sec"><div class="b-k">WEIGHT</div><div class="b-cv b-wt"></div></div>
+        </div>
+        <div class="b-row">
+          <div class="b-sec"><div class="b-k">ORIGIN</div><div class="b-cv">00:00:00</div></div>
+          <div class="b-sec"><div class="b-k">DESTINATION</div><div class="b-cv">23:59:59</div></div>
+        </div>
+        <div class="b-frag"><span>⚠</span> FRAGILE — HANDLE WITH CARE</div>
+      </div>
+      <div class="b-bar"></div>
+    </div>
+    <p class="caption"><b>Time in a box.</b> The present moment, packaged for delivery. Dimensions shift every second. Contents: irreplaceable. Handle with care.</p>`;
+    this.hEl = $('.b-h', root); this.mEl = $('.b-m', root); this.sEl = $('.b-s', root);
+    this.wt = $('.b-wt', root); this.bar = $('.b-bar', root);
+    this.lastS = -1;
+  },
+  frame(d) {
+    const sec = d.getSeconds();
+    if (this.lastS === sec) return;
+    this.lastS = sec;
+    const H = d.getHours(), M = d.getMinutes();
+    flash(this.hEl, p2(H)); flash(this.mEl, p2(M)); flash(this.sEl, p2(sec));
+    const vol = (H || 24) * (M || 60) * (sec || 60);
+    this.wt.textContent = vol.toLocaleString() + ' units';
+    const pct = ((H * 3600 + M * 60 + sec) / 864).toFixed(1);
+    this.bar.style.background = `repeating-linear-gradient(90deg,#fff 0 ${pct}%,#333 ${pct}% 100%)`;
+  }
+};
+
+/* ======================================================================
+   15  ON TIME
+   A status board: are you on time for life's daily events?
+   ====================================================================== */
+const EVENTS = [
+  { name: 'Wake up', h: 7, m: 0 },
+  { name: 'Morning coffee', h: 8, m: 0 },
+  { name: 'Lunch', h: 12, m: 30 },
+  { name: 'Afternoon break', h: 15, m: 0 },
+  { name: 'Dinner', h: 19, m: 0 },
+  { name: 'Wind down', h: 22, m: 0 },
+  { name: 'Sleep', h: 23, m: 30 }
+];
+const ontime = {
+  id: 'ontime', series: 3, title: 'On time', desc: 'Are you on time for life?',
+  preview(d) {
+    const now = d.getHours() * 60 + d.getMinutes();
+    const next = EVENTS.find(e => e.h * 60 + e.m > now) || EVENTS[0];
+    return `${next.name}\n${ontimeSt(d, next).status}`;
+  },
+  mount(root) {
+    root.className = 'clk ont';
+    root.innerHTML = `<div class="o-head"><span>Schedule</span><span class="o-clk"></span></div>
+      <div class="o-list"></div>
+      <p class="caption"><b>On time.</b> Life runs on a schedule nobody gave you. This board tracks whether you're keeping up. The events are made up, but the seconds are real.</p>`;
+    this.list = $('.o-list', root); this.clk = $('.o-clk', root);
+    this.rows = [];
+    EVENTS.forEach(ev => {
+      const row = h('div', 'o-row');
+      row.innerHTML = `<span class="o-name">${ev.name}</span><span class="o-time">${p2(ev.h)}:${p2(ev.m)}</span><span class="o-st"></span>`;
+      this.list.appendChild(row);
+      this.rows.push({ el: row, stEl: $('span.o-st', row), ev });
+    });
+    this.lastMin = -1;
+  },
+  frame(d) {
+    const t = hms(d);
+    if (this.lastT !== t) { this.clk.textContent = this.lastT = t; }
+    const M = d.getMinutes();
+    if (M === this.lastMin) return;
+    this.lastMin = M;
+    this.rows.forEach(r => {
+      const st = ontimeSt(d, r.ev);
+      r.stEl.textContent = st.status;
+      r.stEl.className = 'o-st ' + st.cls;
+      r.el.className = 'o-row' + (st.active ? ' active' : '');
+    });
+  }
+};
+function ontimeSt(d, ev) {
+  const nowMin = d.getHours() * 60 + d.getMinutes();
+  const evMin = ev.h * 60 + ev.m;
+  const diff = evMin - nowMin;
+  if (diff > 60) return { status: `in ${Math.floor(diff / 60)}h ${diff % 60}m`, cls: 'dim', active: false };
+  if (diff > 0) return { status: `in ${diff} min`, cls: 'soon', active: true };
+  if (diff === 0) return { status: 'NOW', cls: 'now', active: true };
+  if (diff > -30) return { status: `${-diff} min ago`, cls: 'past', active: false };
+  return { status: 'done', cls: 'dim', active: false };
+}
+
+/* ======================================================================
    SHELL
    ====================================================================== */
-const ALL = [dilation, timecode, html, stop, words, livedie, here, isit, left, wait];
+const ALL = [dilation, timecode, html, stop, words, livedie, here, isit, left, wait, money, doyou, machine, inbox, ontime];
 ALL.forEach((c, i) => { c.n = i + 1; c.series = c.series || 1; });
 const only = parseInt(params.get('series'), 10);
 const CLOCKS = only ? ALL.filter(c => c.series === only) : ALL;
@@ -556,15 +815,18 @@ const sg = () => { const e = h('div', 'sg'); grid.appendChild(e); return e; };
 if (only) {
   const g = sg(); CLOCKS.forEach(c => g.appendChild(mkTile(c)));
 } else {
-  const s1 = ALL.filter(c => c.series === 1), s2 = ALL.filter(c => c.series === 2);
+  const s1 = ALL.filter(c => c.series === 1), s2 = ALL.filter(c => c.series === 2), s3 = ALL.filter(c => c.series === 3);
   grid.appendChild(serHead(1, 'Uneven, framed, coded, frozen, spoken'));
   let g = sg(); s1.forEach(c => g.appendChild(mkTile(c)));
   g.appendChild(wallTile(s1[0], 'Wall mode · 01', 1, 5, '&series=1', 'Series 01 in turn, no controls. For the Raspberry Pi.'));
   grid.appendChild(serHead(2, 'Dial, map, answer, countdown, queue'));
   g = sg(); s2.forEach(c => g.appendChild(mkTile(c)));
   g.appendChild(wallTile(s2[0], 'Wall mode · 02', 6, 10, '&series=2', 'Series 02 in turn, no controls. For the Raspberry Pi.'));
+  grid.appendChild(serHead(3, 'Meter, question, control, package, schedule'));
+  g = sg(); s3.forEach(c => g.appendChild(mkTile(c)));
+  g.appendChild(wallTile(s3[0], 'Wall mode · 03', 11, 15, '&series=3', 'Series 03 in turn, no controls. For the Raspberry Pi.'));
   g = sg(); g.classList.add('one');
-  const all = wallTile(ALL[0], 'Wall mode · all ten', 1, 10, '', 'Both series in turn, every 60 seconds.');
+  const all = wallTile(ALL[0], 'Wall mode · all fifteen', 1, 15, '', 'All series in turn, every 60 seconds.');
   all.classList.add('wide'); g.appendChild(all);
 }
 
