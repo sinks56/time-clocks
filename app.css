@@ -210,3 +210,105 @@ body.kiosk .stage{padding-top:calc(var(--st) + 18px)}
   .w-tn{font-size:min(28vw,48vh)}.w-cn{font-size:min(22vw,40vh)}
   .hr .caption,.lft .caption,.isit .caption,.wt .caption{max-width:60em}
 }
+
+/* ======================================================================
+   series 03
+   ====================================================================== */
+
+/* ---------- 11 time is money ---------- */
+.mny{justify-content:space-between}
+.m-head{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;letter-spacing:-.02em;font-size:max(13px,min(3.6vw,3.4vh));border-bottom:2px solid var(--fg);padding-bottom:6px}
+.m-head .m-clk{font-family:var(--mono);font-weight:400;color:var(--dim);font-size:.7em}
+.m-main{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:1vh}
+.m-meter{display:flex;flex-direction:column;gap:.5vh}
+.m-lab{font-size:max(11px,min(2.2vw,2.2vh));letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.m-val{font-weight:700;letter-spacing:-.04em;line-height:.85;font-size:min(18vw,16vh);white-space:nowrap}
+.m-rem .m-val{color:var(--accent)}
+.m-bar{height:4px;background:var(--faint);margin:12px 0}
+.m-bar i{display:block;height:100%;background:var(--fg);width:0}
+.m-foot{font-family:var(--mono);font-size:max(11px,min(1.8vw,2vh));color:var(--dim)}
+.m-line{display:flex;justify-content:space-between;padding:2px 0}
+.m-line .m-tot{color:var(--fg)}
+.mny .caption{margin-top:8px}
+@media (min-aspect-ratio:4/3){
+  .m-main{flex-direction:row;align-items:center;gap:5vw}
+  .m-meter{flex:1}
+  .m-val{font-size:min(14vw,20vh)}
+}
+
+/* ---------- 12 do you have the time ---------- */
+.doy{justify-content:space-between}
+.d-chat{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:1.2vh;padding:1vh 0}
+.d-q,.d-a{font-weight:700;letter-spacing:-.03em;line-height:1.1;max-width:90%}
+.d-q{font-size:max(14px,min(4.2vw,4.2vh));color:var(--dim);align-self:flex-start}
+.d-a{font-size:max(18px,min(8vw,8vh));color:var(--fg);align-self:flex-end;text-align:right}
+.doy .caption{margin-top:8px}
+@media (min-aspect-ratio:4/3){
+  .d-q{font-size:max(14px,min(3vw,4vh))}
+  .d-a{font-size:max(20px,min(6vw,10vh))}
+}
+
+/* ---------- 13 time machine ---------- */
+.tm{justify-content:center}
+.tm-panel{border:2px solid var(--fg);width:100%;max-width:900px;margin:0 auto}
+.tm-head{background:var(--fg);color:#000;font-weight:700;font-size:max(12px,min(2.6vw,3vh));letter-spacing:.12em;padding:8px 12px;text-align:center}
+.tm-row{display:flex;border-top:1px solid var(--rule)}
+.tm-cell{flex:1;padding:10px 12px;border-right:1px solid var(--rule)}
+.tm-cell:last-child{border-right:0}
+.tm-k{font-size:max(10px,min(1.6vw,1.8vh));letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.tm-v{font-family:var(--mono);font-size:max(16px,min(4.4vw,5vh));font-weight:700;letter-spacing:-.02em}
+.tm-vel-cell{display:flex;flex-direction:column}
+.tm-dial{display:flex;align-items:center;gap:12px;flex:1}
+.tm-dial svg{width:min(18vw,12vh);height:min(18vw,12vh)}
+.tm-vv{font-family:var(--mono);font-size:max(20px,min(5vw,6vh));font-weight:700}
+.tm-status{display:flex;align-items:center;gap:8px;font-weight:700;font-size:max(14px,min(3.2vw,4vh));letter-spacing:.05em}
+.tm-led{width:12px;height:12px;background:var(--accent);display:inline-block}
+.tm-dest{border-top:1px solid var(--rule)}
+.tm .caption{margin-top:12px;text-align:center}
+@media (min-aspect-ratio:4/3){
+  .tm-panel{max-width:1100px}
+  .tm-v{font-size:max(18px,min(3.4vw,6vh))}
+}
+
+/* ---------- 14 time in a box ---------- */
+.box{justify-content:center}
+.b-label{border:3px solid var(--fg);width:100%;max-width:700px;margin:0 auto;background:#000}
+.b-head{display:flex;justify-content:space-between;align-items:baseline;padding:10px 14px;border-bottom:3px solid var(--fg)}
+.b-co{font-weight:700;font-size:max(16px,min(5vw,4vh));letter-spacing:-.02em}
+.b-ship{font-size:max(10px,min(2vw,2vh));letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.b-body{padding:12px 14px}
+.b-sec{padding:8px 0}
+.b-k{font-size:max(10px,min(1.8vw,1.8vh));letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.b-dims .b-dim{font-family:var(--mono);font-weight:700;font-size:min(14vw,12vh);letter-spacing:-.03em;line-height:.9}
+.b-dims .b-dim span.dim{font-size:.3em;vertical-align:middle;margin:0 .1em}
+.b-cv{font-family:var(--mono);font-size:max(12px,min(2.6vw,2.8vh))}
+.b-row{display:flex;gap:16px}
+.b-row .b-sec{flex:1}
+.b-frag{margin-top:12px;padding:10px;border:2px dashed var(--accent);color:var(--accent);font-weight:700;font-size:max(11px,min(2.4vw,2.4vh));letter-spacing:.06em;text-align:center}
+.b-frag span{margin-right:6px}
+.b-bar{height:40px;margin-top:12px;background:repeating-linear-gradient(90deg,#fff 0 50%,#333 50% 100%)}
+.box .caption{margin-top:12px;text-align:center}
+@media (min-aspect-ratio:4/3){
+  .b-label{max-width:900px}
+  .b-dims .b-dim{font-size:min(10vw,14vh)}
+}
+
+/* ---------- 15 on time ---------- */
+.ont{justify-content:space-between}
+.o-head{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;letter-spacing:-.02em;font-size:max(14px,min(4vw,4vh));border-bottom:2px solid var(--fg);padding-bottom:6px}
+.o-clk{font-family:var(--mono);font-weight:400;color:var(--dim);font-size:.65em}
+.o-list{flex:1;min-height:0;overflow-y:auto;padding:8px 0}
+.o-row{display:flex;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rule);gap:12px;font-size:max(13px,min(3vw,3vh))}
+.o-row.active{background:rgba(255,77,0,.08)}
+.o-name{flex:1;font-weight:700}
+.o-time{font-family:var(--mono);color:var(--dim);min-width:5ch}
+.o-st{font-family:var(--mono);min-width:10ch;text-align:right}
+.o-st.soon{color:var(--accent)}
+.o-st.now{color:var(--accent);font-weight:700}
+.o-st.past{color:#888}
+.o-st.dim{color:var(--dim)}
+.ont .caption{margin-top:8px}
+@media (min-aspect-ratio:4/3){
+  .o-row{font-size:max(14px,min(2.6vw,3.4vh));padding:10px 0}
+  .o-st{min-width:14ch}
+}
